@@ -87,7 +87,6 @@ class _signInState extends State<signIn> {
                   child: Text('Giriş Yap',),
                 ),
               ),
-              
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

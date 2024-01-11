@@ -71,25 +71,17 @@ class _signUpState extends State<signUp> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       )),
-                  onPressed: () {
+                  onPressed: () async{
                     String name = _nameController.text;
                     String email = _emailController.text;
                     String password = _passwordController.text;
-                    AuthService().registerUserWithAuth(
+                    bool isRegisterSuccess = await AuthService().registerUserWithAuth(
                         email: email, name: name, password: password);
-                    Flushbar(
-                      messageText: Center(
-                          child: Text(
-                        'Kayıt Başarıyla Tamamlandı!',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                      backgroundColor: Colors.green,
-                      flushbarPosition: FlushbarPosition.TOP,
-                      positionOffset: 30,
-                      maxWidth: 300,
-                      borderRadius: BorderRadius.circular(40),
-                      duration: Duration(seconds: 3),
-                    )..show(context);
+                    if(isRegisterSuccess){
+                       _registeredMessage(context,text: 'Kayıt başarıyla tamamlandı!',color: Colors.green);
+                    }else{
+                       _registeredMessage(context, text: 'Kayıt tamamlanamadı!',color: Colors.red);
+                    }
                   },
                   child: Text('Kayıt Ol'),
                 ),
@@ -99,5 +91,22 @@ class _signUpState extends State<signUp> {
         ),
       ),
     );
+  }
+
+  Flushbar<dynamic> _registeredMessage(BuildContext context, {required String text,required Color color}) {
+
+    return Flushbar(
+                    messageText: Center(
+                        child: Text(
+                      text,
+                      style: TextStyle(color: Colors.white),
+                    )),
+                    backgroundColor: color,
+                    flushbarPosition: FlushbarPosition.TOP,
+                    positionOffset: 30,
+                    maxWidth: 300,
+                    borderRadius: BorderRadius.circular(40),
+                    duration: Duration(seconds: 3),
+                  )..show(context);
   }
 }

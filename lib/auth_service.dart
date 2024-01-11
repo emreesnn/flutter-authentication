@@ -4,21 +4,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final userCollection = FirebaseFirestore.instance.collection("users");
   final firebaseAuth = FirebaseAuth.instance;
-  Future<void> registerUserWithAuth(
+  Future<bool> registerUserWithAuth(
       {required String name,
       required String email,
       required String password}) async {
+    bool isUserRegistered = false;
     try {
       final UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
       if (userCredential.user != null) {
         String uid = userCredential.user!.uid;
         _registerUser(uid: uid, name: name, email: email, password: password);
-
         print("Kayıt oluşturuldu");
+        isUserRegistered = true;  
       }
+      return isUserRegistered;
     } on FirebaseAuthException catch (e) {
       print(e.message);
+      return isUserRegistered;
     }
   }
 
